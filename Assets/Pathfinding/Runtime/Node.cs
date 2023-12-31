@@ -13,10 +13,14 @@ namespace Pathfinding.Runtime
         // The identities of the neighbor nodes to this node.
         public readonly NodeIdentity[] Neighbors;
 
-        public Node(NodeIdentity identity, NodeIdentity[] neighbors)
+        // Position of the node in world coordinates.
+        public readonly Vector3 PositionInWorldCoordinates;
+
+        public Node(NodeIdentity identity, NodeIdentity[] neighbors, Vector3 positionInWorldCoordinates)
         {
             Identity = identity;
             Neighbors = neighbors;
+            PositionInWorldCoordinates = positionInWorldCoordinates;
         }
     }
 }

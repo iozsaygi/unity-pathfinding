@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 490700570}
+  gizmosSphereRenderRadius: 0.1
 --- !u!1 &218843467
 GameObject:
   m_ObjectHideFlags: 0

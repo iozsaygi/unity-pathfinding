@@ -10,6 +10,9 @@ namespace Pathfinding.Runtime
         // The target plane that we aim to generate nodes on.
         [SerializeField] private MeshFilter meshFilter;
 
+        // Editor debugging properties.
+        [SerializeField, Min(0.1f)] private float gizmosSphereRenderRadius;
+
         // Caching corner points of plane for debugging.
         private Vector3 topLeftCornerInWorldCoordinates;
         private Vector3 topRightCornerInWorldCoordinates;
@@ -17,6 +20,9 @@ namespace Pathfinding.Runtime
 
         // Origin point to start node generation.
         private Vector3 nodeGenerationOrigin;
+
+        // Node array to store generated nodes.
+        private Node[] nodes;
 
         private void Start()
         {
@@ -27,9 +33,9 @@ namespace Pathfinding.Runtime
         {
             // Render cached corner points of plane.
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube(topLeftCornerInWorldCoordinates, Vector3.one);
-            Gizmos.DrawWireCube(topRightCornerInWorldCoordinates, Vector3.one);
-            Gizmos.DrawWireCube(bottomLeftCornerInWorldCoordinates, Vector3.one);
+            Gizmos.DrawSphere(topLeftCornerInWorldCoordinates, gizmosSphereRenderRadius);
+            Gizmos.DrawSphere(topRightCornerInWorldCoordinates, gizmosSphereRenderRadius);
+            Gizmos.DrawSphere(bottomLeftCornerInWorldCoordinates, gizmosSphereRenderRadius);
 
             // Draw a line between corner points.
             Gizmos.color = Color.green;
@@ -37,9 +43,17 @@ namespace Pathfinding.Runtime
             Gizmos.color = Color.white;
             Gizmos.DrawLine(topLeftCornerInWorldCoordinates, bottomLeftCornerInWorldCoordinates);
 
-            // Rendering origin point for node creation debugging.
+            // Render node generation origin point.
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(nodeGenerationOrigin, Node.Size);
+            Gizmos.DrawSphere(nodeGenerationOrigin, gizmosSphereRenderRadius);
+
+            // Render nodes.
+            if (nodes == null) return;
+            Gizmos.color = Color.magenta;
+            for (byte i = 0; i < nodes.Length; i++)
+            {
+                Gizmos.DrawSphere(nodes[i].PositionInWorldCoordinates, gizmosSphereRenderRadius);
+            }
         }
 
         private void GenerateNodes()
@@ -70,14 +84,26 @@ namespace Pathfinding.Runtime
                 Mathf.FloorToInt(Vector3.Distance(topLeftCornerInWorldCoordinates, bottomLeftCornerInWorldCoordinates) /
                                  Node.Size.y);
 
+            nodes = new Node[horizontalNodeCount * verticalNodeCount];
+
             // Generate nodes.
             var generationStep = new Vector3(Node.Size.x / 2.0f, 0.0f, -(Node.Size.y / 2.0f));
             nodeGenerationOrigin = topLeftCornerInWorldCoordinates + generationStep;
 
             byte iterator = 0;
+            byte verticalOffset = 0;
+
             for (byte i = 0; i < horizontalNodeCount * verticalNodeCount; i++)
             {
+                var placement = new Vector3(nodeGenerationOrigin.x + iterator, 0.0f,
+                    nodeGenerationOrigin.z - verticalOffset);
+
+                nodes[i] = new Node(new NodeIdentity(i), null, placement);
+
                 iterator++;
+                if (iterator != horizontalNodeCount) continue;
+                verticalOffset += 1;
+                iterator = 0;
             }
 
             Debug.Log($"Generated {horizontalNodeCount} nodes horizontally and {verticalNodeCount} nodes vertically");

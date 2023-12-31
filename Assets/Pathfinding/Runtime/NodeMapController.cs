@@ -91,7 +91,9 @@ namespace Pathfinding.Runtime
                 var placement = new Vector3(nodeGenerationOrigin.x + iterator, 0.0f,
                     nodeGenerationOrigin.z - verticalOffset);
 
-                nodes[i] = new Node(new NodeIdentity(i), null, placement);
+                var nodeIdentity = new NodeIdentity(i);
+                CalculateNeighborIdentities(nodeIdentity, out var neighbors);
+                nodes[i] = new Node(nodeIdentity, neighbors, placement);
 
                 iterator++;
                 if (iterator != horizontalNodeCount) continue;
@@ -100,6 +102,46 @@ namespace Pathfinding.Runtime
             }
 
             Debug.Log($"Generated {horizontalNodeCount} nodes horizontally and {verticalNodeCount} nodes vertically");
+        }
+
+        private void CalculateNeighborIdentities(NodeIdentity nodeIdentity, out NodeIdentity[] neighbors)
+        {
+            // Assuming we will not be supporting diagonal movement, we'll only consider top, bottom, left and right nodes as neighbor.
+            neighbors = new NodeIdentity[4];
+
+            // Top node identity is current - horizontal node count.
+            var topNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value - horizontalNodeCount);
+            EnsureValidNodeIdentity(ref topNeighborNodeIdentity);
+            neighbors[0] = topNeighborNodeIdentity;
+
+            // Bottom node identity is current + horizontal node count.
+            var bottomNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + horizontalNodeCount);
+            EnsureValidNodeIdentity(ref bottomNeighborNodeIdentity);
+            neighbors[1] = bottomNeighborNodeIdentity;
+
+            // Left node identity is current - 1.
+            var leftNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + 1);
+            EnsureValidNodeIdentity(ref leftNeighborNodeIdentity);
+            neighbors[2] = leftNeighborNodeIdentity;
+
+            // Right node identity is current + 1.
+            var rightNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + 1);
+            EnsureValidNodeIdentity(ref rightNeighborNodeIdentity);
+            neighbors[3] = rightNeighborNodeIdentity;
+        }
+
+        private void EnsureValidNodeIdentity(ref NodeIdentity nodeIdentity)
+        {
+            if (nodeIdentity.Value < 0)
+            {
+                nodeIdentity = NodeIdentity.InvalidIdentity;
+                return;
+            }
+
+            if (nodeIdentity.Value >= nodes.Length)
+            {
+                nodeIdentity = NodeIdentity.InvalidIdentity;
+            }
         }
     }
 }

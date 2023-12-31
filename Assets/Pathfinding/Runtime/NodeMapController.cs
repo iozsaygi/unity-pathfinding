@@ -43,10 +43,6 @@ namespace Pathfinding.Runtime
             Gizmos.color = Color.white;
             Gizmos.DrawLine(topLeftCornerInWorldCoordinates, bottomLeftCornerInWorldCoordinates);
 
-            // Render node generation origin point.
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(nodeGenerationOrigin, gizmosSphereRenderRadius);
-
             // Render nodes.
             if (nodes == null) return;
             Gizmos.color = Color.magenta;

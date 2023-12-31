@@ -21,28 +21,23 @@ namespace Pathfinding.Runtime
         // Origin point to start node generation.
         private Vector3 nodeGenerationOrigin;
 
+        // Calculated count values for node generation.
+        private int horizontalNodeCount;
+        private int verticalNodeCount;
+
         // Node array to store generated nodes.
         private Node[] nodes;
 
         private void Start()
         {
+            // Calculates required values for node generation.
+            Warmup();
+
             GenerateNodes();
         }
 
         private void OnDrawGizmosSelected()
         {
-            // Render cached corner points of plane.
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawSphere(topLeftCornerInWorldCoordinates, gizmosSphereRenderRadius);
-            Gizmos.DrawSphere(topRightCornerInWorldCoordinates, gizmosSphereRenderRadius);
-            Gizmos.DrawSphere(bottomLeftCornerInWorldCoordinates, gizmosSphereRenderRadius);
-
-            // Draw a line between corner points.
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(topLeftCornerInWorldCoordinates, topRightCornerInWorldCoordinates);
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(topLeftCornerInWorldCoordinates, bottomLeftCornerInWorldCoordinates);
-
             // Render nodes.
             if (nodes == null) return;
             Gizmos.color = Color.magenta;
@@ -52,7 +47,7 @@ namespace Pathfinding.Runtime
             }
         }
 
-        private void GenerateNodes()
+        private void Warmup()
         {
             // The bounds of the plane, will be used to calculate corner points of the plane.
             var meshFilterBounds = meshFilter.sharedMesh.bounds;
@@ -71,18 +66,20 @@ namespace Pathfinding.Runtime
             bottomLeftCornerInWorldCoordinates = meshFilter.transform.TransformPoint(meshFilterBounds.min);
 
             // Calculate how many nodes we need to generate horizontally.
-            var horizontalNodeCount =
+            horizontalNodeCount =
                 Mathf.FloorToInt(Vector3.Distance(topLeftCornerInWorldCoordinates, topRightCornerInWorldCoordinates) /
                                  Node.Size.x);
 
             // Calculate how many nodes we need to generate vertically. (For 'Z' axis)
-            var verticalNodeCount =
+            verticalNodeCount =
                 Mathf.FloorToInt(Vector3.Distance(topLeftCornerInWorldCoordinates, bottomLeftCornerInWorldCoordinates) /
                                  Node.Size.y);
+        }
 
+        private void GenerateNodes()
+        {
             nodes = new Node[horizontalNodeCount * verticalNodeCount];
 
-            // Generate nodes.
             var generationStep = new Vector3(Node.Size.x / 2.0f, 0.0f, -(Node.Size.y / 2.0f));
             nodeGenerationOrigin = topLeftCornerInWorldCoordinates + generationStep;
 

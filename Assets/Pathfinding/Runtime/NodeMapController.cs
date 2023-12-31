@@ -13,22 +13,22 @@ namespace Pathfinding.Runtime
         // Editor debugging properties.
         [SerializeField, Min(0.1f)] private float gizmosSphereRenderRadius;
 
+        // Calculated count values for node generation.
+        [field: SerializeField] public int HorizontalNodeCount { get; private set; }
+        [field: SerializeField] public int VerticalNodeCount { get; private set; }
+
         // Caching corner points of plane for debugging.
-        private Vector3 topLeftCornerInWorldCoordinates;
-        private Vector3 topRightCornerInWorldCoordinates;
-        private Vector3 bottomLeftCornerInWorldCoordinates;
+        [field: SerializeField] public Vector3 TopLeftCornerInWorldCoordinates { get; private set; }
+        [field: SerializeField] public Vector3 TopRightCornerInWorldCoordinates { get; private set; }
+        [field: SerializeField] public Vector3 BottomLeftCornerInWorldCoordinates { get; private set; }
 
         // Origin point to start node generation.
         private Vector3 nodeGenerationOrigin;
 
-        // Calculated count values for node generation.
-        private int horizontalNodeCount;
-        private int verticalNodeCount;
-
         // Node array to store generated nodes.
         private Node[] nodes;
 
-        private void Start()
+        private void Awake()
         {
             // Calculates required values for node generation.
             Warmup();
@@ -53,40 +53,40 @@ namespace Pathfinding.Runtime
             var meshFilterBounds = meshFilter.sharedMesh.bounds;
 
             // Cache the top left corner of the plane.
-            topLeftCornerInWorldCoordinates = meshFilter.transform.TransformPoint(meshFilterBounds.min +
+            TopLeftCornerInWorldCoordinates = meshFilter.transform.TransformPoint(meshFilterBounds.min +
                 new Vector3(0.0f, 0.0f, meshFilterBounds.size.z));
 
             // Cache the top right corner of the plane.
-            topRightCornerInWorldCoordinates =
+            TopRightCornerInWorldCoordinates =
                 meshFilter.transform.TransformPoint(meshFilterBounds.min +
                                                     new Vector3(meshFilterBounds.size.x, 0.0f,
                                                         meshFilterBounds.size.z));
 
             // Cache the bottom left corner of the plane.
-            bottomLeftCornerInWorldCoordinates = meshFilter.transform.TransformPoint(meshFilterBounds.min);
+            BottomLeftCornerInWorldCoordinates = meshFilter.transform.TransformPoint(meshFilterBounds.min);
 
             // Calculate how many nodes we need to generate horizontally.
-            horizontalNodeCount =
-                Mathf.FloorToInt(Vector3.Distance(topLeftCornerInWorldCoordinates, topRightCornerInWorldCoordinates) /
+            HorizontalNodeCount =
+                Mathf.FloorToInt(Vector3.Distance(TopLeftCornerInWorldCoordinates, TopRightCornerInWorldCoordinates) /
                                  Node.Size.x);
 
             // Calculate how many nodes we need to generate vertically. (For 'Z' axis)
-            verticalNodeCount =
-                Mathf.FloorToInt(Vector3.Distance(topLeftCornerInWorldCoordinates, bottomLeftCornerInWorldCoordinates) /
+            VerticalNodeCount =
+                Mathf.FloorToInt(Vector3.Distance(TopLeftCornerInWorldCoordinates, BottomLeftCornerInWorldCoordinates) /
                                  Node.Size.y);
         }
 
         private void GenerateNodes()
         {
-            nodes = new Node[horizontalNodeCount * verticalNodeCount];
+            nodes = new Node[HorizontalNodeCount * VerticalNodeCount];
 
             var generationStep = new Vector3(Node.Size.x / 2.0f, 0.0f, -(Node.Size.y / 2.0f));
-            nodeGenerationOrigin = topLeftCornerInWorldCoordinates + generationStep;
+            nodeGenerationOrigin = TopLeftCornerInWorldCoordinates + generationStep;
 
             var iterator = 0;
             var verticalOffset = 0;
 
-            for (var i = 0; i < horizontalNodeCount * verticalNodeCount; i++)
+            for (var i = 0; i < HorizontalNodeCount * VerticalNodeCount; i++)
             {
                 var placement = new Vector3(nodeGenerationOrigin.x + iterator, 0.0f,
                     nodeGenerationOrigin.z - verticalOffset);
@@ -96,12 +96,12 @@ namespace Pathfinding.Runtime
                 nodes[i] = new Node(nodeIdentity, neighbors, placement);
 
                 iterator++;
-                if (iterator != horizontalNodeCount) continue;
+                if (iterator != HorizontalNodeCount) continue;
                 verticalOffset += 1;
                 iterator = 0;
             }
 
-            Debug.Log($"Generated {horizontalNodeCount} nodes horizontally and {verticalNodeCount} nodes vertically");
+            Debug.Log($"Generated {HorizontalNodeCount} nodes horizontally and {VerticalNodeCount} nodes vertically");
         }
 
         private void CalculateNeighborIdentities(NodeIdentity nodeIdentity, out NodeIdentity[] neighbors)
@@ -110,12 +110,12 @@ namespace Pathfinding.Runtime
             neighbors = new NodeIdentity[4];
 
             // Top node identity is current - horizontal node count.
-            var topNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value - horizontalNodeCount);
+            var topNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value - HorizontalNodeCount);
             EnsureValidNodeIdentity(ref topNeighborNodeIdentity);
             neighbors[0] = topNeighborNodeIdentity;
 
             // Bottom node identity is current + horizontal node count.
-            var bottomNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + horizontalNodeCount);
+            var bottomNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + HorizontalNodeCount);
             EnsureValidNodeIdentity(ref bottomNeighborNodeIdentity);
             neighbors[1] = bottomNeighborNodeIdentity;
 

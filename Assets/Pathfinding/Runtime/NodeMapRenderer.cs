@@ -9,8 +9,7 @@ namespace Pathfinding.Runtime
     {
         [SerializeField] private NodeMapController nodeMapController;
         [SerializeField] private LineRenderer lineRendererPrefab;
-
-        private const float heightRate = 0.1f;
+        [SerializeField, Min(0.0f)] private float heightRate;
 
         private void Start()
         {

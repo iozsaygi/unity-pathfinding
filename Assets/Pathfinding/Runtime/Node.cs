@@ -5,7 +5,7 @@ namespace Pathfinding.Runtime
     public readonly struct Node
     {
         // Size of a single node. Will not change at runtime.
-        public static readonly Vector3 Size = Vector3.one / 2.0f;
+        public static readonly Vector3 Size = Vector3.one;
 
         // Unique identity value for this node.
         public readonly NodeIdentity Identity;

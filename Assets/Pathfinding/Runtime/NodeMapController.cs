@@ -83,10 +83,10 @@ namespace Pathfinding.Runtime
             var generationStep = new Vector3(Node.Size.x / 2.0f, 0.0f, -(Node.Size.y / 2.0f));
             nodeGenerationOrigin = topLeftCornerInWorldCoordinates + generationStep;
 
-            byte iterator = 0;
-            byte verticalOffset = 0;
+            var iterator = 0;
+            var verticalOffset = 0;
 
-            for (byte i = 0; i < horizontalNodeCount * verticalNodeCount; i++)
+            for (var i = 0; i < horizontalNodeCount * verticalNodeCount; i++)
             {
                 var placement = new Vector3(nodeGenerationOrigin.x + iterator, 0.0f,
                     nodeGenerationOrigin.z - verticalOffset);

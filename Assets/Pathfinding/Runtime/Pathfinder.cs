@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace Pathfinding.Runtime
 {
-    public class Pathfinder
+    public static class Pathfinder
     {
-        public static List<Node> Execute(Node start, Node destination, NodeMapController nodeMapController)
+        public static List<Node> Execute(Node start, Node destination, NodeMapController nodeMapController,
+            NodeStateStorage nodeStateStorage)
         {
             // Create open list to consider nodes for visiting.
             var toSearch = new List<Node>();
@@ -49,7 +50,8 @@ namespace Pathfinding.Runtime
                     nodeMapController.NodeFromIdentity(neighborIdentity, out var neighbor);
                     if (neighbor.Identity.Equals(NodeIdentity.InvalidIdentity)) continue;
 
-                    // TODO: Check if neighbor is blocked.
+                    nodeStateStorage.IsNodeWalkable(neighbor, out var isWalkable);
+                    if (!isWalkable) continue;
 
                     CalculateHeuristicDistance(currentReliableNode, neighbor, out var heuristicDistance);
                     var tentativeGCost = gCostMap[currentReliableNode] + heuristicDistance;

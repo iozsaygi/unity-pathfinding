@@ -13,8 +13,8 @@ namespace Pathfinding.Runtime
         [SerializeField] private NodeMapController nodeMapController;
         [SerializeField] private GameObject firstNodeHighlight;
         [SerializeField] private GameObject secondNodeHighlight;
-        [SerializeField] private GameObject[] neighborNodeHighlights;
         [SerializeField] private LineRenderer lineRenderer;
+        [SerializeField] private GameObject unWalkableMarkerPrefab;
 
         // Raycast settings.
         [SerializeField, Min(0.1f)] private float interactionDistance;
@@ -23,6 +23,8 @@ namespace Pathfinding.Runtime
         // Interaction tracking.
         private readonly List<Node> interactedNodes = new();
 
+        private readonly NodeStateStorage nodeStateStorage = new();
+
         private void Start()
         {
             firstNodeHighlight.transform.localScale = Node.Size;
@@ -30,68 +32,60 @@ namespace Pathfinding.Runtime
 
         private void Update()
         {
-            if (!Input.GetMouseButtonDown(0)) return;
-
-            var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out var raycastHit, interactionDistance, interactableLayers)) return;
-
-            if (interactedNodes.Count == 2)
+            if (Input.GetMouseButtonDown(1))
             {
-                if (interactedNodes.Count != 2) return;
+                var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                if (!Physics.Raycast(ray, out var raycastHit, interactionDistance, interactableLayers)) return;
 
-
-                firstNodeHighlight.gameObject.SetActive(false);
-                secondNodeHighlight.gameObject.SetActive(false);
-
-                for (byte i = 0; i < neighborNodeHighlights.Length; i++)
-                {
-                    neighborNodeHighlights[i].SetActive(false);
-                }
-
-                var path = Pathfinder.Execute(interactedNodes[0], interactedNodes[1], nodeMapController);
-                lineRenderer.positionCount = path.Count;
-                for (var i = 0; i < path.Count; i++) lineRenderer.SetPosition(i, path[i].PositionInWorldCoordinates);
-
-                interactedNodes.Clear();
-
-                return;
+                nodeMapController.WorldPointToNode(raycastHit.point, out var node);
+                nodeStateStorage.UpdateNodeState(node, unWalkableMarkerPrefab);
             }
 
-            nodeMapController.WorldPointToNode(raycastHit.point, out var node);
-            interactedNodes.Add(node);
-
-
-            switch (interactedNodes.Count)
+            // ReSharper disable once InvertIf
+            if (Input.GetMouseButtonDown(0))
             {
-                // ReSharper disable once Unity.InefficientPropertyAccess
-                case 1:
-                    firstNodeHighlight.gameObject.SetActive(true);
-                    firstNodeHighlight.transform.position = node.PositionInWorldCoordinates;
-                    break;
-                case 2:
-                    secondNodeHighlight.gameObject.SetActive(true);
-                    secondNodeHighlight.transform.position = node.PositionInWorldCoordinates;
-                    break;
-            }
+                var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                if (!Physics.Raycast(ray, out var raycastHit, interactionDistance, interactableLayers)) return;
 
-            // Also highlight the neighbor nodes.
-            HighlightNeighbors(node);
-        }
-
-        private void HighlightNeighbors(Node node)
-        {
-            for (byte i = 0; i < node.Neighbors.Length; i++)
-            {
-                if (node.Neighbors[i].Equals(NodeIdentity.InvalidIdentity))
+                if (interactedNodes.Count == 2)
                 {
-                    neighborNodeHighlights[i].gameObject.SetActive(false);
-                    continue;
+                    firstNodeHighlight.gameObject.SetActive(false);
+                    secondNodeHighlight.gameObject.SetActive(false);
+
+                    var path = Pathfinder.Execute(interactedNodes[0], interactedNodes[1], nodeMapController,
+                        nodeStateStorage);
+
+                    interactedNodes.Clear();
+                    if (path == null)
+                    {
+                        lineRenderer.positionCount = 0;
+                        return;
+                    }
+
+                    lineRenderer.positionCount = path.Count;
+                    for (var i = 0; i < path.Count; i++)
+                    {
+                        lineRenderer.SetPosition(i, path[i].PositionInWorldCoordinates);
+                    }
+
+                    return;
                 }
 
-                neighborNodeHighlights[i].gameObject.SetActive(true);
+                nodeMapController.WorldPointToNode(raycastHit.point, out var node);
+                interactedNodes.Add(node);
 
-                nodeMapController.NodeFromIdentity(node.Neighbors[i], out var neighborNode);
-                neighborNodeHighlights[i].transform.position = neighborNode.PositionInWorldCoordinates;
+                switch (interactedNodes.Count)
+                {
+                    // ReSharper disable once Unity.InefficientPropertyAccess
+                    case 1:
+                        firstNodeHighlight.gameObject.SetActive(true);
+                        firstNodeHighlight.transform.position = node.PositionInWorldCoordinates;
+                        break;
+                    case 2:
+                        secondNodeHighlight.gameObject.SetActive(true);
+                        secondNodeHighlight.transform.position = node.PositionInWorldCoordinates;
+                        break;
+                }
             }
         }
     }

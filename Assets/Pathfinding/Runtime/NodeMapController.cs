@@ -52,6 +52,7 @@ namespace Pathfinding.Runtime
             var horizontalPercentage = Mathf.Clamp01((worldPoint.x - TopLeftCornerInWorldCoordinates.x) /
                                                      (TopRightCornerInWorldCoordinates.x -
                                                       TopLeftCornerInWorldCoordinates.x));
+
             var verticalPercentage = Mathf.Clamp01((worldPoint.z - TopLeftCornerInWorldCoordinates.z) /
                                                    (BottomLeftCornerInWorldCoordinates.z -
                                                     TopLeftCornerInWorldCoordinates.z));
@@ -68,6 +69,11 @@ namespace Pathfinding.Runtime
             {
                 node = default;
             }
+        }
+
+        public void NodeFromIdentity(NodeIdentity nodeIdentity, out Node node)
+        {
+            node = nodes[nodeIdentity.Value];
         }
 
         private void Warmup()
@@ -143,14 +149,28 @@ namespace Pathfinding.Runtime
             neighbors[1] = bottomNeighborNodeIdentity;
 
             // Left node identity is current - 1.
-            var leftNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + 1);
-            EnsureValidNodeIdentity(ref leftNeighborNodeIdentity);
-            neighbors[2] = leftNeighborNodeIdentity;
+            if (nodeIdentity.Value % HorizontalNodeCount == 0)
+            {
+                neighbors[2] = NodeIdentity.InvalidIdentity;
+            }
+            else
+            {
+                var leftNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value - 1);
+                EnsureValidNodeIdentity(ref leftNeighborNodeIdentity);
+                neighbors[2] = leftNeighborNodeIdentity;
+            }
 
             // Right node identity is current + 1.
-            var rightNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + 1);
-            EnsureValidNodeIdentity(ref rightNeighborNodeIdentity);
-            neighbors[3] = rightNeighborNodeIdentity;
+            if (nodeIdentity.Value % HorizontalNodeCount == HorizontalNodeCount - 1)
+            {
+                neighbors[3] = NodeIdentity.InvalidIdentity;
+            }
+            else
+            {
+                var rightNeighborNodeIdentity = new NodeIdentity(nodeIdentity.Value + 1);
+                EnsureValidNodeIdentity(ref rightNeighborNodeIdentity);
+                neighbors[3] = rightNeighborNodeIdentity;
+            }
         }
 
         private void EnsureValidNodeIdentity(ref NodeIdentity nodeIdentity)

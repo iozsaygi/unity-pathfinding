@@ -21,11 +21,16 @@ namespace Pathfinding.Runtime
 
         private void Update()
         {
+            if (!Input.GetMouseButtonDown(0)) return;
+
             var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out var raycastHit, interactionDistance, interactableLayers)) return;
             currentNodeHighlight.transform.position = raycastHit.point;
 
-            // TODO: Convert world point to node by using node map controller.
+            nodeMapController.WorldPointToNode(raycastHit.point, out var node);
+
+            // ReSharper disable once Unity.InefficientPropertyAccess
+            currentNodeHighlight.transform.position = node.PositionInWorldCoordinates;
         }
     }
 }

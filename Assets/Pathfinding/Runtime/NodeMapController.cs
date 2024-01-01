@@ -47,6 +47,29 @@ namespace Pathfinding.Runtime
             }
         }
 
+        public void WorldPointToNode(Vector3 worldPoint, out Node node)
+        {
+            var horizontalPercentage = Mathf.Clamp01((worldPoint.x - TopLeftCornerInWorldCoordinates.x) /
+                                                     (TopRightCornerInWorldCoordinates.x -
+                                                      TopLeftCornerInWorldCoordinates.x));
+            var verticalPercentage = Mathf.Clamp01((worldPoint.z - TopLeftCornerInWorldCoordinates.z) /
+                                                   (BottomLeftCornerInWorldCoordinates.z -
+                                                    TopLeftCornerInWorldCoordinates.z));
+
+            var horizontalIndex = Mathf.FloorToInt(horizontalPercentage * HorizontalNodeCount);
+            var verticalIndex = Mathf.FloorToInt(verticalPercentage * VerticalNodeCount);
+            var nodeIndex = verticalIndex * HorizontalNodeCount + horizontalIndex;
+
+            if (nodeIndex >= 0 && nodeIndex < nodes.Length)
+            {
+                node = nodes[nodeIndex];
+            }
+            else
+            {
+                node = default;
+            }
+        }
+
         private void Warmup()
         {
             // The bounds of the plane, will be used to calculate corner points of the plane.

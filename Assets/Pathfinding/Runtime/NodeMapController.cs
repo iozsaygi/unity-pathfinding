@@ -73,7 +73,9 @@ namespace Pathfinding.Runtime
 
         public void NodeFromIdentity(NodeIdentity nodeIdentity, out Node node)
         {
-            node = nodes[nodeIdentity.Value];
+            node = nodeIdentity.Equals(NodeIdentity.InvalidIdentity)
+                ? node = new Node(NodeIdentity.InvalidIdentity, null, default)
+                : nodes[nodeIdentity.Value];
         }
 
         private void Warmup()

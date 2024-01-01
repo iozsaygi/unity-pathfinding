@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// ReSharper disable InconsistentNaming
+
 namespace Pathfinding.Runtime
 {
     [DisallowMultipleComponent]
@@ -12,6 +14,7 @@ namespace Pathfinding.Runtime
         [SerializeField] private GameObject firstNodeHighlight;
         [SerializeField] private GameObject secondNodeHighlight;
         [SerializeField] private GameObject[] neighborNodeHighlights;
+        [SerializeField] private LineRenderer lineRenderer;
 
         // Raycast settings.
         [SerializeField, Min(0.1f)] private float interactionDistance;
@@ -36,7 +39,6 @@ namespace Pathfinding.Runtime
             {
                 if (interactedNodes.Count != 2) return;
 
-                interactedNodes.Clear();
 
                 firstNodeHighlight.gameObject.SetActive(false);
                 secondNodeHighlight.gameObject.SetActive(false);
@@ -46,7 +48,11 @@ namespace Pathfinding.Runtime
                     neighborNodeHighlights[i].SetActive(false);
                 }
 
-                // TODO: Execute pathfinding.
+                var path = Pathfinder.Execute(interactedNodes[0], interactedNodes[1], nodeMapController);
+                lineRenderer.positionCount = path.Count;
+                for (var i = 0; i < path.Count; i++) lineRenderer.SetPosition(i, path[i].PositionInWorldCoordinates);
+
+                interactedNodes.Clear();
 
                 return;
             }

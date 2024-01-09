@@ -1,26 +1,27 @@
 using System;
 using UnityEngine;
 
-// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable InconsistentNaming
 
 namespace Pathfinding.Runtime
 {
     public readonly struct Node : IEquatable<Node>
     {
-        public readonly NodeIdentity Identity;
         public readonly NodeIdentity[] Neighbors;
         public readonly Vector3 Position;
 
+        private readonly NodeIdentity identity;
+
         public Node(NodeIdentity nodeIdentity, NodeIdentity[] neighbors, Vector3 position)
         {
-            Identity = nodeIdentity;
+            identity = nodeIdentity;
             Neighbors = neighbors;
             Position = position;
         }
 
         public bool Equals(Node other)
         {
-            return Identity.Context == other.Identity.Context;
+            return identity.Context == other.identity.Context;
         }
 
         public override bool Equals(object obj)
@@ -30,7 +31,7 @@ namespace Pathfinding.Runtime
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Identity.Context);
+            return HashCode.Combine(identity.Context);
         }
     }
 }

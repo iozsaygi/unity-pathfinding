@@ -1,15 +1,16 @@
 using UnityEngine;
 
-// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable InconsistentNaming
 
 namespace Pathfinding.Runtime
 {
     public class Grid
     {
         public readonly Node[] Nodes;
-        public readonly Vector2 NodeSize;
-        public readonly Vector2Int MapSize;
-        public readonly float SpacingBetweenNodes;
+
+        private readonly Vector2 nodeSize;
+        private readonly Vector2Int mapSize;
+        private readonly float spacingBetweenNodes;
 
         public Grid(Vector2Int mapSize, Vector2 nodeSize, float spacingBetweenNodes)
         {
@@ -17,10 +18,11 @@ namespace Pathfinding.Runtime
             Debug.Assert(!nodeSize.Equals(Vector2Int.zero));
             Debug.Assert(spacingBetweenNodes >= 0.0f);
 
-            MapSize = mapSize;
-            NodeSize = nodeSize;
             Nodes = new Node[mapSize.x * mapSize.y];
-            SpacingBetweenNodes = spacingBetweenNodes;
+
+            this.mapSize = mapSize;
+            this.nodeSize = nodeSize;
+            this.spacingBetweenNodes = spacingBetweenNodes;
 
             Populate();
         }
@@ -29,18 +31,18 @@ namespace Pathfinding.Runtime
         {
             // Calculate offset for the node.
             var nodePositionOffset =
-                new Vector3(NodeSize.x + SpacingBetweenNodes, 0.0f, NodeSize.y + SpacingBetweenNodes);
+                new Vector3(nodeSize.x + spacingBetweenNodes, 0.0f, nodeSize.y + spacingBetweenNodes);
 
             // Figure out the center.
             var gridCenter =
-                new Vector3((MapSize.x - 1) * 0.5f * nodePositionOffset.x, 0.0f,
-                    (MapSize.y - 1) * 0.5f * nodePositionOffset.z);
+                new Vector3((mapSize.x - 1) * 0.5f * nodePositionOffset.x, 0.0f,
+                    (mapSize.y - 1) * 0.5f * nodePositionOffset.z);
 
-            for (var row = 0; row < MapSize.y; row++)
+            for (var row = 0; row < mapSize.y; row++)
             {
-                for (var col = 0; col < MapSize.x; col++)
+                for (var col = 0; col < mapSize.x; col++)
                 {
-                    var index = row * MapSize.x + col;
+                    var index = row * mapSize.x + col;
                     var nodeIdentity = new NodeIdentity(index);
 
                     var nodePosition =

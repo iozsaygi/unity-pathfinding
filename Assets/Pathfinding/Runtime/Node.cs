@@ -1,4 +1,7 @@
 using System;
+using UnityEngine;
+
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Pathfinding.Runtime
 {
@@ -6,11 +9,13 @@ namespace Pathfinding.Runtime
     {
         public readonly NodeIdentity Identity;
         public readonly NodeIdentity[] Neighbors;
+        public readonly Vector3 Position;
 
-        public Node(NodeIdentity nodeIdentity, NodeIdentity[] neighbors)
+        public Node(NodeIdentity nodeIdentity, NodeIdentity[] neighbors, Vector3 position)
         {
             Identity = nodeIdentity;
             Neighbors = neighbors;
+            Position = position;
         }
 
         public bool Equals(Node other)

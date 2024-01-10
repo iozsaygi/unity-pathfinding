@@ -48,8 +48,50 @@ namespace Pathfinding.Runtime
                     var nodePosition =
                         new Vector3(col * nodePositionOffset.x, 0.0f, row * nodePositionOffset.z) - gridCenter;
 
-                    Nodes[index] = new Node(nodeIdentity, null, nodePosition);
+                    CalculateNeighbors(nodeIdentity, out var neighbors);
+
+                    Nodes[index] = new Node(nodeIdentity, neighbors, nodePosition);
                 }
+            }
+        }
+
+        private void EnsureNodeIdentityIsValid(NodeIdentity nodeIdentity, out bool isNodeIdentityValid)
+        {
+            isNodeIdentityValid = nodeIdentity.Context > 0 && nodeIdentity.Context < Nodes.Length;
+        }
+
+        private void CalculateNeighbors(NodeIdentity nodeIdentity, out NodeIdentity[] neighbors)
+        {
+            neighbors = new NodeIdentity[4];
+
+            // Top node.
+            {
+                var topNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context + mapSize.x);
+                EnsureNodeIdentityIsValid(topNodeIdentityAssumption, out var isTopNodeIdentityAssumptionValid);
+                neighbors[0] = isTopNodeIdentityAssumptionValid ? topNodeIdentityAssumption : NodeIdentity.Invalid;
+            }
+
+            // Bottom node.
+            {
+                var bottomNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context - mapSize.x);
+                EnsureNodeIdentityIsValid(bottomNodeIdentityAssumption, out var isBottomNodeIdentityAssumptionValid);
+                neighbors[1] = isBottomNodeIdentityAssumptionValid
+                    ? bottomNodeIdentityAssumption
+                    : NodeIdentity.Invalid;
+            }
+
+            // Left node.
+            {
+                var leftNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context - 1);
+                EnsureNodeIdentityIsValid(leftNodeIdentityAssumption, out var isLeftNodeIdentityAssumptionValid);
+                neighbors[2] = isLeftNodeIdentityAssumptionValid ? leftNodeIdentityAssumption : NodeIdentity.Invalid;
+            }
+
+            // Right node.
+            {
+                var rightNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context + 1);
+                EnsureNodeIdentityIsValid(rightNodeIdentityAssumption, out var isRightNodeIdentityAssumptionValid);
+                neighbors[3] = isRightNodeIdentityAssumptionValid ? rightNodeIdentityAssumption : NodeIdentity.Invalid;
             }
         }
     }

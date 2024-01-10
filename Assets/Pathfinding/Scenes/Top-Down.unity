@@ -400,6 +400,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: _InteractionHighlight
       objectReference: {fileID: 0}
+    - target: {fileID: 57194657128648082, guid: 37cb28b471214b24387be2c846e0e086, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1150039472842930897, guid: 37cb28b471214b24387be2c846e0e086, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -509,6 +513,26 @@ PrefabInstance:
       propertyPath: pathfindingSceneConnection
       value: 
       objectReference: {fileID: 1319354161}
+    - target: {fileID: 7195282830093319186, guid: 1bf7462ecec640943a1450d49d793b13, type: 3}
+      propertyPath: interactionHighlightsForNeighbors.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195282830093319186, guid: 1bf7462ecec640943a1450d49d793b13, type: 3}
+      propertyPath: interactionHighlightsForNeighbors.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195282830093319186, guid: 1bf7462ecec640943a1450d49d793b13, type: 3}
+      propertyPath: interactionHighlightsForNeighbors.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195282830093319186, guid: 1bf7462ecec640943a1450d49d793b13, type: 3}
+      propertyPath: interactionHighlightsForNeighbors.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195282830093319186, guid: 1bf7462ecec640943a1450d49d793b13, type: 3}
+      propertyPath: interactionHighlightsForNeighbors.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

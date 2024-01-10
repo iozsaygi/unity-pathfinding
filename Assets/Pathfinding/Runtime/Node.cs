@@ -7,6 +7,8 @@ namespace Pathfinding.Runtime
 {
     public readonly struct Node : IEquatable<Node>
     {
+        public static readonly Node Invalid = new(NodeIdentity.Invalid, null, Vector3.zero);
+
         public readonly NodeIdentity[] Neighbors;
         public readonly Vector3 Position;
 

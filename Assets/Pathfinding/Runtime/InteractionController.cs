@@ -7,6 +7,7 @@ namespace Pathfinding.Runtime
     {
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Transform interactionHighlight;
+        [SerializeField] private Vector3 highlightInvalidPosition;
         [SerializeField] private PathfindingSceneConnection pathfindingSceneConnection;
 
         private void Start()
@@ -23,6 +24,14 @@ namespace Pathfinding.Runtime
 
             // Update the highlight's position to mouse position.
             pathfindingSceneConnection.Grid.WorldPointToNode(mousePositionInWorldCoordinates, out var node);
+
+            // Don't bother with all of this stuff below if the node is invalid.
+            if (node.Equals(Node.Invalid))
+            {
+                interactionHighlight.position = highlightInvalidPosition;
+                return;
+            }
+
             interactionHighlight.position = node.Position;
         }
     }

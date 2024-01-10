@@ -43,7 +43,7 @@ namespace Pathfinding.Runtime
             }
             else
             {
-                node = new Node(NodeIdentity.Invalid, null, Vector3.zero);
+                node = Node.Invalid;
             }
         }
 

@@ -42,8 +42,6 @@ namespace Pathfinding.Runtime
 
                 return;
             }
-            
-            Debug.Log("Node " + node.Identity.Context);
 
             interactionHighlight.position = node.Position;
             for (byte i = 0; i < node.Neighbors.Length; i++)

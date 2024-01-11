@@ -55,6 +55,15 @@ namespace Pathfinding.Runtime
                 var neighborNode = pathfindingSceneConnection.Grid.Nodes[node.Neighbors[i].Context];
                 interactionHighlightsForNeighbor[i].position = neighborNode.Position;
             }
+
+            // Check for right mouse button down input.
+            if (!Input.GetMouseButtonDown(1))
+            {
+                return;
+            }
+
+            pathfindingSceneConnection.Grid.GridGameObjectRegistry.Register(node,
+                pathfindingSceneConnection.PathfindingBlockerObject);
         }
     }
 }

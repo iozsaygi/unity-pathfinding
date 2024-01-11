@@ -9,6 +9,8 @@ namespace Pathfinding.Runtime
     {
         public Grid Grid { get; private set; }
 
+        [field: SerializeField] public GameObject PathfindingBlockerObject { get; private set; }
+
         [SerializeField] private Vector2Int mapSize;
         [SerializeField] private Vector2 nodeSize;
         [SerializeField, Min(0.0f)] private float spacingBetweenNodes;

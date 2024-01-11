@@ -76,7 +76,7 @@ namespace Pathfinding.Runtime
 
         private void EnsureNodeIdentityIsValid(NodeIdentity nodeIdentity, out bool isNodeIdentityValid)
         {
-            isNodeIdentityValid = nodeIdentity.Context > 0 && nodeIdentity.Context < Nodes.Length;
+            isNodeIdentityValid = nodeIdentity.Context >= 0 && nodeIdentity.Context < Nodes.Length;
         }
 
         private void CalculateNeighbors(NodeIdentity nodeIdentity, out NodeIdentity[] neighbors)
@@ -102,8 +102,17 @@ namespace Pathfinding.Runtime
             // Left node.
             {
                 var leftNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context - 1);
-                EnsureNodeIdentityIsValid(leftNodeIdentityAssumption, out var isLeftNodeIdentityAssumptionValid);
-                neighbors[2] = isLeftNodeIdentityAssumptionValid ? leftNodeIdentityAssumption : NodeIdentity.Invalid;
+                if (nodeIdentity.Context % mapSize.x == 0)
+                {
+                    neighbors[2] = NodeIdentity.Invalid;
+                }
+                else
+                {
+                    EnsureNodeIdentityIsValid(leftNodeIdentityAssumption, out var isLeftNodeIdentityAssumptionValid);
+                    neighbors[2] = isLeftNodeIdentityAssumptionValid
+                        ? leftNodeIdentityAssumption
+                        : NodeIdentity.Invalid;
+                }
             }
 
             // Right node.

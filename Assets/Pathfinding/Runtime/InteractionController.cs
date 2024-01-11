@@ -7,12 +7,18 @@ namespace Pathfinding.Runtime
     {
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Transform interactionHighlight;
+        [SerializeField] private Transform[] interactionHighlightsForNeighbor;
         [SerializeField] private Vector3 highlightInvalidPosition;
         [SerializeField] private PathfindingSceneConnection pathfindingSceneConnection;
 
         private void Start()
         {
             interactionHighlight.transform.localScale = pathfindingSceneConnection.Grid.NodeSize;
+            for (byte i = 0; i < interactionHighlightsForNeighbor.Length; i++)
+            {
+                interactionHighlightsForNeighbor[i].position = highlightInvalidPosition;
+                interactionHighlightsForNeighbor[i].transform.localScale = pathfindingSceneConnection.Grid.NodeSize;
+            }
         }
 
         private void Update()
@@ -33,6 +39,17 @@ namespace Pathfinding.Runtime
             }
 
             interactionHighlight.position = node.Position;
+            for (byte i = 0; i < node.Neighbors.Length; i++)
+            {
+                if (node.Neighbors[i].Equals(NodeIdentity.Invalid))
+                {
+                    interactionHighlightsForNeighbor[i].position = highlightInvalidPosition;
+                    continue;
+                }
+
+                var neighborNode = pathfindingSceneConnection.Grid.Nodes[node.Neighbors[i].Context];
+                interactionHighlightsForNeighbor[i].position = neighborNode.Position;
+            }
         }
     }
 }

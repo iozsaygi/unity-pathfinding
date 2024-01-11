@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <PathfindingBlockerObject>k__BackingField: {fileID: 6158038003765575213, guid: 625c2a8efaea3f144a5c75176329fc07, type: 3}
-  mapSize: {x: 20, y: 20}
+  mapSize: {x: 30, y: 20}
   nodeSize: {x: 0.5, y: 0.5}
   spacingBetweenNodes: 0

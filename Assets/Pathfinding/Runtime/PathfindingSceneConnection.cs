@@ -33,7 +33,7 @@ namespace Pathfinding.Runtime
             Gizmos.color = Color.white;
             foreach (var node in Grid.Nodes)
             {
-                Gizmos.DrawWireSphere(node.Position, nodeSphereRadius);
+                Gizmos.DrawSphere(node.Position, nodeSphereRadius);
             }
         }
     }

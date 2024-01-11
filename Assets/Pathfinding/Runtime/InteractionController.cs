@@ -10,6 +10,8 @@ namespace Pathfinding.Runtime
         [SerializeField] private Transform[] interactionHighlightsForNeighbor;
         [SerializeField] private Vector3 highlightInvalidPosition;
         [SerializeField] private PathfindingSceneConnection pathfindingSceneConnection;
+        [SerializeField] private Transform firstPathPointHighlight;
+        [SerializeField] private Transform secondPathPointHighlight;
 
         private void Start()
         {
@@ -19,6 +21,11 @@ namespace Pathfinding.Runtime
                 interactionHighlightsForNeighbor[i].position = highlightInvalidPosition;
                 interactionHighlightsForNeighbor[i].transform.localScale = pathfindingSceneConnection.Grid.NodeSize;
             }
+
+            firstPathPointHighlight.transform.localScale = pathfindingSceneConnection.Grid.NodeSize;
+            secondPathPointHighlight.transform.localScale = pathfindingSceneConnection.Grid.NodeSize;
+            firstPathPointHighlight.position = highlightInvalidPosition;
+            secondPathPointHighlight.position = highlightInvalidPosition;
         }
 
         private void Update()
@@ -56,14 +63,18 @@ namespace Pathfinding.Runtime
                 interactionHighlightsForNeighbor[i].position = neighborNode.Position;
             }
 
-            // Check for right mouse button down input.
-            if (!Input.GetMouseButtonDown(1))
+            // 'LMB' input listener.
+            if (Input.GetMouseButtonDown(0))
             {
-                return;
+                // TODO: Add interactions for path points.
             }
 
-            pathfindingSceneConnection.Grid.GridGameObjectRegistry.Register(node,
-                pathfindingSceneConnection.PathfindingBlockerObject);
+            // 'RMB' input listener.
+            if (Input.GetMouseButtonDown(1))
+            {
+                pathfindingSceneConnection.Grid.GridGameObjectRegistry.Register(node,
+                    pathfindingSceneConnection.PathfindingBlockerObject);
+            }
         }
     }
 }

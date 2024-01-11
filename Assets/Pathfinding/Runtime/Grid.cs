@@ -8,8 +8,8 @@ namespace Pathfinding.Runtime
     {
         public readonly Node[] Nodes;
         public readonly Vector2 NodeSize;
+        public readonly Vector2Int MapSize;
 
-        private readonly Vector2Int mapSize;
         private readonly float spacingBetweenNodes;
 
         private Vector3 center;
@@ -23,7 +23,7 @@ namespace Pathfinding.Runtime
             Nodes = new Node[mapSize.x * mapSize.y];
             NodeSize = nodeSize;
 
-            this.mapSize = mapSize;
+            this.MapSize = mapSize;
             this.spacingBetweenNodes = spacingBetweenNodes;
 
             Populate();
@@ -35,10 +35,10 @@ namespace Pathfinding.Runtime
                 new Vector2Int(Mathf.RoundToInt((worldPoint.x + center.x) / (NodeSize.x + spacingBetweenNodes)),
                     Mathf.RoundToInt((worldPoint.z + center.z) / (NodeSize.y + spacingBetweenNodes)));
 
-            if (positionInGrid.x >= 0 && positionInGrid.x < mapSize.x && positionInGrid.y >= 0 &&
-                positionInGrid.y < mapSize.y)
+            if (positionInGrid.x >= 0 && positionInGrid.x < MapSize.x && positionInGrid.y >= 0 &&
+                positionInGrid.y < MapSize.y)
             {
-                var nodeIndex = positionInGrid.y * mapSize.x + positionInGrid.x;
+                var nodeIndex = positionInGrid.y * MapSize.x + positionInGrid.x;
                 node = Nodes[nodeIndex];
             }
             else
@@ -54,14 +54,14 @@ namespace Pathfinding.Runtime
                 new Vector3(NodeSize.x + spacingBetweenNodes, 0.0f, NodeSize.y + spacingBetweenNodes);
 
             // Figure out the center.
-            center = new Vector3((mapSize.x - 1) * 0.5f * nodePositionOffset.x, 0.0f,
-                (mapSize.y - 1) * 0.5f * nodePositionOffset.z);
+            center = new Vector3((MapSize.x - 1) * 0.5f * nodePositionOffset.x, 0.0f,
+                (MapSize.y - 1) * 0.5f * nodePositionOffset.z);
 
-            for (var row = 0; row < mapSize.y; row++)
+            for (var row = 0; row < MapSize.y; row++)
             {
-                for (var col = 0; col < mapSize.x; col++)
+                for (var col = 0; col < MapSize.x; col++)
                 {
-                    var index = row * mapSize.x + col;
+                    var index = row * MapSize.x + col;
                     var nodeIdentity = new NodeIdentity(index);
 
                     var nodePosition =
@@ -85,14 +85,14 @@ namespace Pathfinding.Runtime
 
             // Top node.
             {
-                var topNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context + mapSize.x);
+                var topNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context + MapSize.x);
                 EnsureNodeIdentityIsValid(topNodeIdentityAssumption, out var isTopNodeIdentityAssumptionValid);
                 neighbors[0] = isTopNodeIdentityAssumptionValid ? topNodeIdentityAssumption : NodeIdentity.Invalid;
             }
 
             // Bottom node.
             {
-                var bottomNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context - mapSize.x);
+                var bottomNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context - MapSize.x);
                 EnsureNodeIdentityIsValid(bottomNodeIdentityAssumption, out var isBottomNodeIdentityAssumptionValid);
                 neighbors[1] = isBottomNodeIdentityAssumptionValid
                     ? bottomNodeIdentityAssumption
@@ -102,7 +102,7 @@ namespace Pathfinding.Runtime
             // Left node.
             {
                 var leftNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context - 1);
-                if (nodeIdentity.Context % mapSize.x == 0)
+                if (nodeIdentity.Context % MapSize.x == 0)
                 {
                     neighbors[2] = NodeIdentity.Invalid;
                 }
@@ -118,7 +118,7 @@ namespace Pathfinding.Runtime
             // Right node.
             {
                 var rightNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context + 1);
-                if (rightNodeIdentityAssumption.Context % mapSize.x == 0)
+                if (rightNodeIdentityAssumption.Context % MapSize.x == 0)
                 {
                     neighbors[3] = NodeIdentity.Invalid;
                 }

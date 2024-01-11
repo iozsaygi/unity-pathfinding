@@ -818,6 +818,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: _PathfindingSceneConnection
       objectReference: {fileID: 0}
+    - target: {fileID: 6930073119239485766, guid: 7ffb89fff921c0c4a9d471f1b68d7e1a, type: 3}
+      propertyPath: gridRenderer
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930073119239485766, guid: 7ffb89fff921c0c4a9d471f1b68d7e1a, type: 3}
+      propertyPath: gridLineRenderer
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930073119239485766, guid: 7ffb89fff921c0c4a9d471f1b68d7e1a, type: 3}
+      propertyPath: gridVerticalLineRenderer
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930073119239485766, guid: 7ffb89fff921c0c4a9d471f1b68d7e1a, type: 3}
+      propertyPath: gridHorizontalLineRenderer
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8434013979525625763, guid: 7ffb89fff921c0c4a9d471f1b68d7e1a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

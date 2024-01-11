@@ -109,8 +109,17 @@ namespace Pathfinding.Runtime
             // Right node.
             {
                 var rightNodeIdentityAssumption = new NodeIdentity(nodeIdentity.Context + 1);
-                EnsureNodeIdentityIsValid(rightNodeIdentityAssumption, out var isRightNodeIdentityAssumptionValid);
-                neighbors[3] = isRightNodeIdentityAssumptionValid ? rightNodeIdentityAssumption : NodeIdentity.Invalid;
+                if (rightNodeIdentityAssumption.Context % mapSize.x == 0)
+                {
+                    neighbors[3] = NodeIdentity.Invalid;
+                }
+                else
+                {
+                    EnsureNodeIdentityIsValid(rightNodeIdentityAssumption, out var isRightNodeIdentityAssumptionValid);
+                    neighbors[3] = isRightNodeIdentityAssumptionValid
+                        ? rightNodeIdentityAssumption
+                        : NodeIdentity.Invalid;
+                }
             }
         }
     }

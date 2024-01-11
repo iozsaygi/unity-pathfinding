@@ -35,8 +35,15 @@ namespace Pathfinding.Runtime
             if (node.Equals(Node.Invalid))
             {
                 interactionHighlight.position = highlightInvalidPosition;
+                for (byte i = 0; i < interactionHighlightsForNeighbor.Length; i++)
+                {
+                    interactionHighlightsForNeighbor[i].position = highlightInvalidPosition;
+                }
+
                 return;
             }
+            
+            Debug.Log("Node " + node.Identity.Context);
 
             interactionHighlight.position = node.Position;
             for (byte i = 0; i < node.Neighbors.Length; i++)

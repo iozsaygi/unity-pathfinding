@@ -42,5 +42,10 @@ namespace Pathfinding.Runtime
                 registry.TryAdd(node, pathfindingBlockerPrefabInstance);
             }
         }
+
+        public bool IsNodeRegisteredWithPathfindingBlocker(Node node)
+        {
+            return registry.ContainsKey(node) && registry[node] != null;
+        }
     }
 }

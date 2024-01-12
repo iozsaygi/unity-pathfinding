@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// ReSharper disable InconsistentNaming
+
 namespace Pathfinding.Runtime
 {
     [DisallowMultipleComponent]
@@ -68,6 +70,12 @@ namespace Pathfinding.Runtime
             // 'LMB' input listener.
             if (Input.GetMouseButtonDown(0))
             {
+                // Do not switch highlights if node is registered with blocker object.
+                if (pathfindingSceneConnection.Grid.GridGameObjectRegistry.IsNodeRegisteredWithPathfindingBlocker(node))
+                {
+                    return;
+                }
+
                 if (firstPathPointHighlight.position.Equals(highlightInvalidPosition))
                 {
                     firstPathPointHighlight.position = node.Position;
@@ -75,6 +83,7 @@ namespace Pathfinding.Runtime
                 else if (secondPathPointHighlight.position.Equals(highlightInvalidPosition))
                 {
                     secondPathPointHighlight.position = node.Position;
+                    // TODO: Execute pathfinding here.
                 }
                 else
                 {
@@ -85,6 +94,7 @@ namespace Pathfinding.Runtime
                     else
                     {
                         secondPathPointHighlight.position = node.Position;
+                        // TODO: Execute pathfinding here.
                     }
 
                     resetFirstHighlight = !resetFirstHighlight;

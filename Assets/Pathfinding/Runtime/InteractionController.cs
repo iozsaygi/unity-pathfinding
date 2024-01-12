@@ -13,6 +13,8 @@ namespace Pathfinding.Runtime
         [SerializeField] private Transform firstPathPointHighlight;
         [SerializeField] private Transform secondPathPointHighlight;
 
+        private bool resetFirstHighlight = true;
+
         private void Start()
         {
             interactionHighlight.transform.localScale = pathfindingSceneConnection.Grid.NodeSize;
@@ -66,7 +68,27 @@ namespace Pathfinding.Runtime
             // 'LMB' input listener.
             if (Input.GetMouseButtonDown(0))
             {
-                // TODO: Add interactions for path points.
+                if (firstPathPointHighlight.position.Equals(highlightInvalidPosition))
+                {
+                    firstPathPointHighlight.position = node.Position;
+                }
+                else if (secondPathPointHighlight.position.Equals(highlightInvalidPosition))
+                {
+                    secondPathPointHighlight.position = node.Position;
+                }
+                else
+                {
+                    if (resetFirstHighlight)
+                    {
+                        firstPathPointHighlight.position = node.Position;
+                    }
+                    else
+                    {
+                        secondPathPointHighlight.position = node.Position;
+                    }
+
+                    resetFirstHighlight = !resetFirstHighlight;
+                }
             }
 
             // 'RMB' input listener.

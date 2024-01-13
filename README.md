@@ -7,8 +7,8 @@ Uses [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.ht
 provide diagonal movement support since we just need to calculate four more extra neighbors for each node.
 
 ## Preview
-![First preview](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
-![Second preview](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+![First preview](https://github.com/iozsaygi/unity-pathfinding/blob/main/Media/FirstPreview.gif)
+![Second preview](https://github.com/iozsaygi/unity-pathfinding/blob/main/Media/SecondPreview.gif)
 
 ## Optimization ideas
 - Implementing min-heap to quickly find reliable nodes to search for

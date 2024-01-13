@@ -7,7 +7,7 @@ Uses [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.ht
 provide diagonal movement support since we just need to calculate four more extra neighbors for each node.
 
 ## Preview
-Captured previews on a 50x30 grid map.
+Captured previews on a ``50x30`` grid map.
 
 ![First preview](https://github.com/iozsaygi/unity-pathfinding/blob/main/Media/FirstPreview.gif)
 ![Second preview](https://github.com/iozsaygi/unity-pathfinding/blob/main/Media/SecondPreview.gif)

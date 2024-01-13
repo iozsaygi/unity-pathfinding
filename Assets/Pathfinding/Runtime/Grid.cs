@@ -49,6 +49,11 @@ namespace Pathfinding.Runtime
             }
         }
 
+        public void NodeFromNodeIdentity(NodeIdentity nodeIdentity, out Node node)
+        {
+            node = Nodes[nodeIdentity.Context];
+        }
+
         private void Populate()
         {
             // Calculate offset for the node.

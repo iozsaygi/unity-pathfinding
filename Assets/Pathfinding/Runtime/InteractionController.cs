@@ -14,6 +14,7 @@ namespace Pathfinding.Runtime
         [SerializeField] private PathfindingSceneConnection pathfindingSceneConnection;
         [SerializeField] private Transform firstPathPointHighlight;
         [SerializeField] private Transform secondPathPointHighlight;
+        [SerializeField] private LineRenderer pathPreviewRenderer;
 
         private bool resetFirstHighlight = true;
 

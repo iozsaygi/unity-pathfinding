@@ -16,6 +16,9 @@ namespace Pathfinding.Runtime
         [SerializeField] private Transform secondPathPointHighlight;
         [SerializeField] private LineRenderer pathPreviewRenderer;
 
+        private Node sourceNode;
+        private Node destinationNode;
+
         private bool resetFirstHighlight = true;
 
         private void Start()
@@ -80,22 +83,26 @@ namespace Pathfinding.Runtime
                 if (firstPathPointHighlight.position.Equals(highlightInvalidPosition))
                 {
                     firstPathPointHighlight.position = node.Position;
+                    sourceNode = node;
                 }
                 else if (secondPathPointHighlight.position.Equals(highlightInvalidPosition))
                 {
                     secondPathPointHighlight.position = node.Position;
-                    // TODO: Execute pathfinding here.
+                    destinationNode = node;
+                    UpdatePathPreview();
                 }
                 else
                 {
                     if (resetFirstHighlight)
                     {
                         firstPathPointHighlight.position = node.Position;
+                        sourceNode = node;
                     }
                     else
                     {
                         secondPathPointHighlight.position = node.Position;
-                        // TODO: Execute pathfinding here.
+                        destinationNode = node;
+                        UpdatePathPreview();
                     }
 
                     resetFirstHighlight = !resetFirstHighlight;
@@ -107,6 +114,17 @@ namespace Pathfinding.Runtime
             {
                 pathfindingSceneConnection.Grid.GridGameObjectRegistry.Register(node,
                     pathfindingSceneConnection.PathfindingBlockerObject);
+            }
+        }
+
+        private void UpdatePathPreview()
+        {
+            var path = Pathfinder.Execute(sourceNode, destinationNode, pathfindingSceneConnection.Grid);
+            pathPreviewRenderer.positionCount = path.Count;
+
+            for (var i = 0; i < path.Count; i++)
+            {
+                pathPreviewRenderer.SetPosition(i, path[i].Position);
             }
         }
     }

@@ -5,7 +5,7 @@ namespace Pathfinding.Runtime
 {
     public static class Pathfinder
     {
-        public static void Execute(Node source, Node destination, Grid grid, out IReadOnlyList<Node> path)
+        public static List<Node> Execute(Node source, Node destination, Grid grid)
         {
             Debug.Assert(!source.Equals(Node.Invalid));
             Debug.Assert(!destination.Equals(Node.Invalid));
@@ -47,7 +47,7 @@ namespace Pathfinding.Runtime
                     // We found the path.
                     PathfinderUtilities.TraversePath(explorationChain, reliableNode, out var traversedPath);
                     traversedPath.Add(reliableNode);
-                    path = traversedPath;
+                    return traversedPath;
                 }
 
                 // Remove the queried node.
@@ -56,6 +56,12 @@ namespace Pathfinding.Runtime
                 // Explore the neighbors.
                 foreach (var nodeIdentity in reliableNode.Neighbors)
                 {
+                    // Ensure neighbor is valid.
+                    if (nodeIdentity.Equals(NodeIdentity.Invalid))
+                    {
+                        continue;
+                    }
+
                     grid.NodeFromNodeIdentity(nodeIdentity, out var neighbor);
                     if (neighbor.Equals(Node.Invalid))
                     {
@@ -73,10 +79,11 @@ namespace Pathfinding.Runtime
                     var tentativeGCostForNeighbor = calculatedGCosts[reliableNode] + heuristicDistance;
 
                     if (calculatedGCosts.ContainsKey(neighbor) &&
-                        !(tentativeGCostForNeighbor < calculatedGCosts[neighbor]))
+                        tentativeGCostForNeighbor >= calculatedGCosts[neighbor])
                     {
                         continue;
                     }
+
 
                     // Update the exploration chain for future traversals.
                     explorationChain[neighbor] = reliableNode;
@@ -97,7 +104,7 @@ namespace Pathfinding.Runtime
             }
 
             // Just allocate the list if no path found.
-            path = new List<Node>();
+            return new List<Node>();
         }
     }
 }

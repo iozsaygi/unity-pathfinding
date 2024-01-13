@@ -6,6 +6,10 @@ top-down 3D environments.
 Uses [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.html) to calculate heuristics and doesn't provide support for diagonal movement. However, it is easy to
 provide diagonal movement support since we just need to calculate four more extra neighbors for each node.
 
+## Optimization ideas
+- Implementing min-heap to quickly find reliable nodes to search for
+- Pre-baking node generation during editor and just executing pathfinding at runtime
+
 ## License
 
 [MIT License](https://github.com/iozsaygi/unity-pathfinding/blob/main/LICENSE)

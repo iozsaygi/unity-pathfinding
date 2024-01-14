@@ -97,6 +97,7 @@ namespace Pathfinding.Runtime
                     {
                         firstPathPointHighlight.position = node.Position;
                         sourceNode = node;
+                        pathPreviewRenderer.positionCount = 0;
                     }
                     else
                     {

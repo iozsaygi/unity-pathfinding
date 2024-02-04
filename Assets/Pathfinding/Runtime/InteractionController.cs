@@ -111,15 +111,23 @@ namespace Pathfinding.Runtime
             }
 
             // 'RMB' input listener.
+            // ReSharper disable once InvertIf
             if (Input.GetMouseButtonDown(1))
             {
                 pathfindingSceneConnection.Grid.GridGameObjectRegistry.Register(node,
                     pathfindingSceneConnection.PathfindingBlockerObject);
+
+                UpdatePathPreview();
             }
         }
 
         private void UpdatePathPreview()
         {
+            if (sourceNode.Equals(default) || destinationNode.Equals(default))
+            {
+                return;
+            }
+
             var path = Pathfinder.Execute(sourceNode, destinationNode, pathfindingSceneConnection.Grid);
             pathPreviewRenderer.positionCount = path.Count;
 

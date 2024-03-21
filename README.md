@@ -11,7 +11,7 @@ provide diagonal movement support since we just need to calculate four more extr
 
 Captured previews on a ``50x30`` grid map.
 
-[![Video preview](https://img.youtube.com/vi/koZuPMJewcQ?si=Z6Wt44NLBWvpq2uf/0.jpg)](https://www.youtube.com/watch?v=koZuPMJewcQ?si=Z6Wt44NLBWvpq2uf)
+[![Video preview](https://img.youtube.com/vi/koZuPMJewcQ/0.jpg)](https://www.youtube.com/watch?v=koZuPMJewcQ)
 ![First preview](https://github.com/iozsaygi/unity-pathfinding/blob/main/Media/FirstPreview.gif)
 ![Second preview](https://github.com/iozsaygi/unity-pathfinding/blob/main/Media/SecondPreview.gif)
 

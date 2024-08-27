@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Pathfinding.Runtime
 {
@@ -7,6 +8,9 @@ namespace Pathfinding.Runtime
     {
         public static List<Node> Execute(Node source, Node destination, Grid grid)
         {
+            // Begin profiling.
+            Profiler.BeginSample(ProfilerConstants.SampleLabel);
+
             Debug.Assert(!source.Equals(Node.Invalid));
             Debug.Assert(!destination.Equals(Node.Invalid));
             Debug.Assert(grid != null);
@@ -102,6 +106,9 @@ namespace Pathfinding.Runtime
                     }
                 }
             }
+
+            // End profiling.
+            Profiler.EndSample();
 
             // Just allocate the list if no path found.
             return new List<Node>();
